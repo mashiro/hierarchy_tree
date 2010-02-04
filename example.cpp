@@ -3,14 +3,15 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <iostream>
+#include <string>
 #include <vector>
-#include <list>
+#include <deque>
 
 class Animal
 {
 public:
 	MEL_HIERARCHY_TREE_METADATA_DEF(Animal);
-	virtual const char* name() const = 0;
+	virtual std::string name() const { return "Animal"; }
 };
 
 #define ANIMAL_DEF(_name, _base) \
@@ -20,7 +21,7 @@ public:
 	{ \
 	public: \
 		MEL_HIERARCHY_TREE_METADATA_DEF(_name); \
-		virtual const char* name() const { return #_name; } \
+		virtual std::string name() const { return _base::name() + " -> " + #_name; } \
 		static _name##Ptr create() { return _name##Ptr(new _name()); } \
 	}; \
 /**/
@@ -108,6 +109,39 @@ int main()
 	print(tree);
 
 	// extract cats
-	std::list<CatPtr> cats;
+	std::deque<CatPtr> cats;
 	tree.for_each<Cat>(mel::make_hierarchy_tree_extractor(cats));
 }
+
+/* o—Í */
+/*
+all ------------------
+Animal -> Cat -> Munchkin
+Animal -> Cat -> Birman
+Animal -> Cat -> MaineCoon
+Animal -> Dog -> Papillon
+Animal -> Dog -> BorderCollie
+Animal -> Dog -> Dachshund
+
+dogs -----------------
+Animal -> Dog -> Papillon
+Animal -> Dog -> BorderCollie
+Animal -> Dog -> Dachshund
+
+cats -----------------
+Animal -> Cat -> Munchkin
+Animal -> Cat -> Birman
+Animal -> Cat -> MaineCoon
+
+all ------------------
+Animal -> Cat -> Munchkin
+Animal -> Cat -> Birman
+Animal -> Cat -> MaineCoon
+
+dogs -----------------
+
+cats -----------------
+Animal -> Cat -> Munchkin
+Animal -> Cat -> Birman
+Animal -> Cat -> MaineCoon
+*/
