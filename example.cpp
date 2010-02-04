@@ -61,8 +61,10 @@ struct Clearer
 template <typename Tree>
 void print(const Tree& tree)
 {
+	Printer p;
+
 	std::cout << "all ------------------" << std::endl;
-	tree.for_each_extended(Printer());
+	tree.for_each_extended(boost::cref(p));
 	std::cout << std::endl;
 
 	std::cout << "dogs -----------------" << std::endl;
