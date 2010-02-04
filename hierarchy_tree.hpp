@@ -1,5 +1,5 @@
-#ifndef MEL_HIERARCHY_TREE_HPP
-#define MEL_HIERARCHY_TREE_HPP
+#ifndef MEL_HIERARCHY_TREE_HIERARCHY_TREE_HPP
+#define MEL_HIERARCHY_TREE_HIERARCHY_TREE_HPP
 
 #ifndef MEL_HIERARCHY_TREE_METADATA_TYPE_NAME
 #define MEL_HIERARCHY_TREE_METADATA_TYPE_NAME hierarchy_tree_metadata_type
@@ -9,7 +9,6 @@
 #include "detail/unwrap.hpp"
 #include "detail/policy.hpp"
 #include "detail/tree.hpp"
-#include <boost/cast.hpp>
 
 #define MEL_HIERARCHY_TREE_METADATA_DEF(name) \
 	typedef mel::detail::hierarchy_tree::metadata<name>::type MEL_HIERARCHY_TREE_METADATA_TYPE_NAME \
@@ -109,53 +108,6 @@ private:
 	tree_type root_;
 };
 
-/* extractor */
-template <typename Container>
-struct hierarchy_tree_extractor
-{
-	Container& c_;
-	hierarchy_tree_extractor(Container& c) : c_(c) {}
-
-	template <typename T>
-	void operator ()(const T& container) const
-	{
-		typedef typename T::const_iterator iter_t;
-		converter<typename Container::value_type> converter;
-		for (iter_t it = container.begin(); it != container.end(); ++it)
-			c_.push_back(converter(*it));
-	}
-
-	template <typename Target>
-	struct converter
-	{
-		typedef Target result_type;
-
-		template <typename Source>
-		result_type operator ()(const Source& source) const
-		{
-			return boost::polymorphic_downcast<result_type>(source);
-		}
-	};
-
-	template <typename Target>
-	struct converter< boost::shared_ptr<Target> >
-	{
-		typedef boost::shared_ptr<Target> result_type;
-
-		template <typename Source>
-		result_type operator ()(const Source& source) const
-		{
-			return boost::shared_polymorphic_downcast<Target>(source);
-		}
-	};
-};
-
-template <typename Container>
-hierarchy_tree_extractor<Container> make_hierarchy_tree_extractor(Container& c)
-{
-	return hierarchy_tree_extractor<Container>(c);
-};
-
 } // namespace mel
 
-#endif // MEL_HIERARCHY_TREE_HPP
+#endif // MEL_HIERARCHY_TREE_HIERARCHY_TREE_HPP

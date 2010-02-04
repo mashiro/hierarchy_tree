@@ -1,8 +1,10 @@
 #include "hierarchy_tree.hpp"
+#include "extractor.hpp"
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <iostream>
 #include <vector>
+#include <list>
 
 class Animal
 {
@@ -104,4 +106,8 @@ int main()
 
 	// print
 	print(tree);
+
+	// extract cats
+	std::list<CatPtr> cats;
+	tree.for_each<Cat>(mel::make_hierarchy_tree_extractor(cats));
 }
