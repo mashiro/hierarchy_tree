@@ -113,7 +113,7 @@ int main()
 	tree.for_each<Cat>(mel::make_hierarchy_tree_extractor(cats));
 }
 
-/* o—Í */
+/* output */
 /*
 all ------------------
 Animal -> Cat -> Munchkin
