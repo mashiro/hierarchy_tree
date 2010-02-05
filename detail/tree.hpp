@@ -74,7 +74,7 @@ private:
 	tree_type& find_node_impl(typename boost::disable_if<IsTail>::type* = 0)
 	{
 		const std::type_info* id = &typeid(typename Cons::head_type);
-		return get_child(id).find_node_impl<typename Cons::tail_type, is_tail<Cons> >();
+		return get_child(id).template find_node_impl<typename Cons::tail_type, is_tail<Cons> >();
 	}
 
 	template <typename Cons>
@@ -93,7 +93,7 @@ private:
 	const tree_type& find_node_impl(typename boost::disable_if<IsTail>::type* = 0) const
 	{
 		const std::type_info* id = &typeid(typename Cons::head_type);
-		return get_child(id).find_node_impl<typename Cons::tail_type, is_tail<Cons> >();
+		return get_child(id).template find_node_impl<typename Cons::tail_type, is_tail<Cons> >();
 	}
 
 	/* get_child */
