@@ -40,6 +40,7 @@ typename boost::unwrap_reference<T>::type& unwrap_ref(T& t)
 	return t;
 }
 
+
 }} // namespace detail::hierarchy_tree
 } // namespace mel
 
