@@ -55,13 +55,14 @@ public:
 	void operator ()(T& arg) const
 	{
 		namespace here = mel::detail::hierarchy_tree;
-		return here::unwrap_ref(f)(arg);
+		return here::unwrap_ref(f_)(arg);
 	}
 
 	template <typename T>
 	void operator ()(const T& arg) const
 	{
-		return here::unwrap_ref(f)(arg);
+		namespace here = mel::detail::hierarchy_tree;
+		return here::unwrap_ref(f_)(arg);
 	}
 
 private:
