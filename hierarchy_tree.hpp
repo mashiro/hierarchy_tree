@@ -43,7 +43,7 @@ public:
 	void insert(const U& value)
 	{
 		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
-		root_.insert<metadata>(value);
+		root_.template insert<metadata>(value);
 	}
 
 	/* for_each */
@@ -65,14 +65,14 @@ public:
 	void for_each(Func func, bool recursive = true)
 	{
 		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
-		root_.for_each<metadata>(func, recursive);
+		root_.template for_each<metadata>(func, recursive);
 	}
 
 	template <typename Unwrapped, typename Func>
 	void for_each(Func func, bool recursive = true) const
 	{
 		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
-		root_.for_each<metadata>(func, recursive);
+		root_.template for_each<metadata>(func, recursive);
 	}
 
 	/* for_each_extended */
@@ -94,14 +94,14 @@ public:
 	void for_each_extended(Func func, bool recursive = true)
 	{
 		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
-		root_.for_each_extended<metadata>(func, recursive);
+		root_.template for_each_extended<metadata>(func, recursive);
 	}
 
 	template <typename Unwrapped, typename Func>
 	void for_each_extended(Func func, bool recursive = true) const
 	{
 		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
-		root_.for_each_extended<metadata>(func, recursive);
+		root_.template for_each_extended<metadata>(func, recursive);
 	}
 
 private:
