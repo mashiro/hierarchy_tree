@@ -71,11 +71,11 @@ void print(const Tree& tree)
 	std::cout << std::endl;
 
 	std::cout << "dogs -----------------" << std::endl;
-	tree.for_each_extended<Dog>(Printer());
+	tree.template for_each_extended<Dog>(Printer());
 	std::cout << std::endl;
 
 	std::cout << "cats -----------------" << std::endl;
-	tree.for_each_extended<Cat>(Printer());
+	tree.template for_each_extended<Cat>(Printer());
 	std::cout << std::endl;
 }
 

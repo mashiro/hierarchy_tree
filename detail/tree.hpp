@@ -160,15 +160,15 @@ private:
 	}
 
 	/* call_function */
-	template <typename Func, typename T>
-	void call_function(Func func, T& value)
+	template <typename Func, typename Value>
+	void call_function(Func func, Value& value)
 	{
 		namespace here = mel::detail::hierarchy_tree;
 		here::unwrap_ref(func)(value);
 	}
 
-	template <typename Func, typename T>
-	void call_function(Func func, const T& value) const
+	template <typename Func, typename Value>
+	void call_function(Func func, const Value& value) const
 	{
 		namespace here = mel::detail::hierarchy_tree;
 		here::unwrap_ref(func)(value);
