@@ -40,6 +40,33 @@ typename boost::unwrap_reference<T>::type& unwrap_ref(T& t)
 	return t;
 }
 
+/* unwrap_function */
+template <typename F>
+class unwrap_function
+{
+public:
+	typedef void result_type;
+
+	unwrap_function(F f)
+		: f_(f)
+	{}
+
+	template <typename T>
+	void operator ()(T& arg) const
+	{
+		namespace here = mel::detail::hierarchy_tree;
+		return here::unwrap_ref(f)(arg);
+	}
+
+	template <typename T>
+	void operator ()(const T& arg) const
+	{
+		return here::unwrap_ref(f)(arg);
+	}
+
+private:
+	F f_;
+};
 
 }} // namespace detail::hierarchy_tree
 } // namespace mel
