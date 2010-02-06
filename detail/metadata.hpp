@@ -35,6 +35,13 @@ struct metadata
 	: metadata_impl<T, BOOST_PP_CAT(has_, MEL_HIERARCHY_TREE_METADATA_TYPE_NAME)<T>::value>
 {};
 
+/* metadata_type */
+template <typename T>
+struct metadata_type
+{
+	typedef typename T::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME type;
+};
+
 }} // namespace detail::hierarchy_tree
 } // namespace mel
 

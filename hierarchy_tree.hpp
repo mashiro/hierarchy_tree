@@ -42,7 +42,7 @@ public:
 	template <typename U, typename Unwrapped>
 	void insert(const U& value)
 	{
-		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
+		typedef typename detail::hierarchy_tree::metadata_type<Unwrapped>::type metadata;
 		root_.template insert<metadata>(value);
 	}
 
@@ -64,14 +64,14 @@ public:
 	template <typename Unwrapped, typename Func>
 	void for_each(Func func, bool recursive = true)
 	{
-		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
+		typedef typename detail::hierarchy_tree::metadata_type<Unwrapped>::type metadata;
 		root_.template for_each<metadata>(func, recursive);
 	}
 
 	template <typename Unwrapped, typename Func>
 	void for_each(Func func, bool recursive = true) const
 	{
-		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
+		typedef typename detail::hierarchy_tree::metadata_type<Unwrapped>::type metadata;
 		root_.template for_each<metadata>(func, recursive);
 	}
 
@@ -93,14 +93,14 @@ public:
 	template <typename Unwrapped, typename Func>
 	void for_each_extended(Func func, bool recursive = true)
 	{
-		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
+		typedef typename detail::hierarchy_tree::metadata_type<Unwrapped>::type metadata;
 		root_.template for_each_extended<metadata>(func, recursive);
 	}
 
 	template <typename Unwrapped, typename Func>
 	void for_each_extended(Func func, bool recursive = true) const
 	{
-		typedef typename Unwrapped::MEL_HIERARCHY_TREE_METADATA_TYPE_NAME metadata;
+		typedef typename detail::hierarchy_tree::metadata_type<Unwrapped>::type metadata;
 		root_.template for_each_extended<metadata>(func, recursive);
 	}
 
