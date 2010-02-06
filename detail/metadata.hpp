@@ -12,7 +12,7 @@ namespace detail { namespace hierarchy_tree {
 /* metadata */
 BOOST_MPL_HAS_XXX_TRAIT_DEF(MEL_HIERARCHY_TREE_METADATA_TYPE_NAME);
 
-template <typename T, bool C>
+template <typename T, bool HasMetadata>
 struct metadata_impl
 {
 	typedef typename append<
