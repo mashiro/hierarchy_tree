@@ -35,39 +35,45 @@ struct unwrap< boost::weak_ptr<T> >
 
 /* unwrap_ref */
 template <typename T>
-typename boost::unwrap_reference<T>::type& unwrap_ref(T& t)
+inline typename boost::unwrap_reference<T>::type& unwrap_ref(T& t)
 {
 	return t;
 }
 
 /* unwrap_function */
-template <typename F>
+template <typename Func>
 class unwrap_function
 {
 public:
 	typedef void result_type;
 
-	unwrap_function(F f)
-		: f_(f)
+	unwrap_function(Func func)
+		: func_(func)
 	{}
 
 	template <typename T>
-	void operator ()(T& arg) const
+	void operator ()(T& arg)
 	{
 		namespace here = mel::detail::hierarchy_tree;
-		return here::unwrap_ref(f_)(arg);
+		return here::unwrap_ref(func_)(arg);
 	}
 
 	template <typename T>
 	void operator ()(const T& arg) const
 	{
 		namespace here = mel::detail::hierarchy_tree;
-		return here::unwrap_ref(f_)(arg);
+		return here::unwrap_ref(func_)(arg);
 	}
 
 private:
-	F f_;
+	Func func_;
 };
+
+template <typename Func>
+inline unwrap_function<Func> make_unwrap_function(Func func)
+{
+	return unwrap_function<Func>(func);
+}
 
 }} // namespace detail::hierarchy_tree
 } // namespace mel

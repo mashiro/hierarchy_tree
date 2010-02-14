@@ -2,6 +2,7 @@
 #include "extractor.hpp"
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/ref.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -51,6 +52,9 @@ struct MyChildrenPolicy
 
 struct Printer
 {
+	Printer() { std::cout << "ctor" << std::endl; }
+	Printer(const Printer&) { std::cout << "copy" << std::endl; }
+
 	template <typename T>
 	void operator ()(const T& arg) const { std::cout << arg->name() << std::endl; }
 };
@@ -71,11 +75,11 @@ void print(const Tree& tree)
 	std::cout << std::endl;
 
 	std::cout << "dogs -----------------" << std::endl;
-	tree.template for_each_extended<Dog>(Printer());
+	tree.template for_each_extended<Dog>(boost::cref(p));
 	std::cout << std::endl;
 
 	std::cout << "cats -----------------" << std::endl;
-	tree.template for_each_extended<Cat>(Printer());
+	tree.template for_each_extended<Cat>(boost::cref(p));
 	std::cout << std::endl;
 }
 

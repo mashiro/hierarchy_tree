@@ -6,6 +6,7 @@
 #include <boost/call_traits.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/bind.hpp>
 #include <typeinfo>
 
 namespace mel {
@@ -16,7 +17,8 @@ template <typename T, typename SiblingPolicy, typename ChildrenPolicy>
 class tree
 {
 public:
-	typedef tree<T, SiblingPolicy, ChildrenPolicy> tree_type;
+	typedef tree<T, SiblingPolicy, ChildrenPolicy> self;
+	typedef self tree_type;
 	typedef typename boost::call_traits<T>::value_type value_type;
 	typedef typename boost::call_traits<T>::param_type param_type;
 	typedef typename boost::mpl::apply<SiblingPolicy, T>::type sibling_type;
@@ -57,6 +59,17 @@ public:
 	}
 
 private:
+	/* get_child */
+	tree_type& get_child(const std::type_info* id)
+	{
+		return children_[id];			
+	}
+
+	const tree_type& get_child(const std::type_info* id) const
+	{
+		return static_cast<const tree_type&>(const_cast<children_type&>(children_)[id]);
+	}
+
 	/* find_node */
 	template <typename Cons>
 	tree_type& find_node()
@@ -96,22 +109,11 @@ private:
 		return get_child(id).template find_node_impl<typename Cons::tail_type, is_tail<Cons> >();
 	}
 
-	/* get_child */
-	tree_type& get_child(const std::type_info* id)
-	{
-		return children_[id];			
-	}
-
-	const tree_type& get_child(const std::type_info* id) const
-	{
-		return static_cast<const tree_type&>(const_cast<children_type&>(children_)[id]);
-	}
-
 	/* for_each_impl */
 	template <typename Func>
 	void for_each_impl(Func func, bool recursive)
 	{
-		call_function(func, sibling_);
+		make_unwrap_function(func)(sibling_);
 
 		if (recursive)
 		{
@@ -123,7 +125,7 @@ private:
 	template <typename Func>
 	void for_each_impl(Func func, bool recursive) const
 	{
-		call_function(func, sibling_);
+		make_unwrap_function(func)(sibling_);
 
 		if (recursive)
 		{
@@ -136,8 +138,7 @@ private:
 	template <typename Func>
 	void for_each_extended_impl(Func func, bool recursive)
 	{
-		for (typename sibling_type::iterator it = sibling_.begin(); it != sibling_.end(); ++it)
-			call_function(func, *it);
+		std::for_each(sibling_.begin(), sibling_.end(), make_unwrap_function(func));
 
 		if (recursive)
 		{
@@ -149,29 +150,13 @@ private:
 	template <typename Func>
 	void for_each_extended_impl(Func func, bool recursive) const
 	{
-		for (typename sibling_type::const_iterator it = sibling_.begin(); it != sibling_.end(); ++it)
-			call_function(func, *it);
+		std::for_each(sibling_.begin(), sibling_.end(), make_unwrap_function(func));
 
 		if (recursive)
 		{
 			for (typename children_type::const_iterator it = children_.begin(); it != children_.end(); ++it)
 				it->second.for_each_extended_impl(func, recursive);
 		}
-	}
-
-	/* call_function */
-	template <typename Func, typename Value>
-	void call_function(Func func, Value& value)
-	{
-		namespace here = mel::detail::hierarchy_tree;
-		here::unwrap_ref(func)(value);
-	}
-
-	template <typename Func, typename Value>
-	void call_function(Func func, const Value& value) const
-	{
-		namespace here = mel::detail::hierarchy_tree;
-		here::unwrap_ref(func)(value);
 	}
 
 private:
